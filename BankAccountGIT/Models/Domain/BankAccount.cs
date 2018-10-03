@@ -18,13 +18,14 @@ namespace BankingApp.Models.Domain
             {
                 return _balance;
             }
-            set
+            protected set
             {
                 if (value < 0)
                     throw new ArgumentException("No negatve balance");
                 _balance = value;
             }
         }
+
 
         public string AccountNumber { get; set; }//automatic property
 
@@ -46,10 +47,8 @@ namespace BankingApp.Models.Domain
             Balance = balance;
         }
 
-        public BankAccount()
-        {
 
-        }
+
         #endregion
         #region Methods
         public void Deposit(decimal amount)
@@ -58,11 +57,29 @@ namespace BankingApp.Models.Domain
             _transactions.Add(new Transaction(amount, TransactionType.Deposit));
         }
 
-        public void Withdraw(decimal amount)
+        public virtual void Withdraw(decimal amount)
         {
             Balance -= amount + WithdrawCost;
             _transactions.Add(new Transaction(amount, TransactionType.Withdraw));
 
+        }
+
+        public override string ToString()
+        {
+            return $"{AccountNumber} -- {Balance}";
+        }
+
+        public override bool Equals(object obj)
+        {
+            BankAccount temp = obj as BankAccount;
+
+            if (temp == null) return false;
+            return AccountNumber == temp.AccountNumber;
+        }
+
+        public override int GetHashCode()
+        {
+            return AccountNumber.GetHashCode();
         }
         #endregion
 
