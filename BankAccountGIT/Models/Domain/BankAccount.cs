@@ -1,13 +1,17 @@
-﻿using System;
+﻿using BankAccountGIT.Models.Domain;
+using System;
+using System.Collections.Generic;
 
 namespace BankingApp.Models.Domain
 {
     public class BankAccount
     {
-        private decimal _balance;
 
-        #region Properties.
+        #region Properties en fields.
         public const decimal WithdrawCost = 0.10M; //Hier plak je de M achter het getal, want het is een double maar je toont zo aan de compiler dat het eigelijk een decimal is.
+        private decimal _balance;
+        private ICollection<Transaction> _transactions;
+
         public decimal Balance
         {
             get
@@ -23,12 +27,16 @@ namespace BankingApp.Models.Domain
         }
 
         public string AccountNumber { get; set; }//automatic property
+
+        public IEnumerable<Transaction> Transactions { get { return _transactions; } }
         #endregion 
+
         #region Constructors
         public BankAccount(string accountNumber)         //Constructor 1
 
         {
             AccountNumber = accountNumber;
+            _transactions = new List<Transaction>();
         }
 
         //Constructor 2
@@ -47,11 +55,14 @@ namespace BankingApp.Models.Domain
         public void Deposit(decimal amount)
         {
             Balance += amount;
+            _transactions.Add(new Transaction(amount, TransactionType.Deposit));
         }
 
-        public void Withdraw(decimal value)
+        public void Withdraw(decimal amount)
         {
-            Balance -= value + WithdrawCost;
+            Balance -= amount + WithdrawCost;
+            _transactions.Add(new Transaction(amount, TransactionType.Withdraw));
+
         }
         #endregion
 

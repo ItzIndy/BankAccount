@@ -1,6 +1,8 @@
 ﻿
+using BankAccountGIT.Models.Domain;
 using BankingApp.Models.Domain;
 using System;
+using System.Collections.Generic;
 
 namespace BankingApp
 {
@@ -22,6 +24,9 @@ namespace BankingApp
             Console.WriteLine($"Balance is {myBA.Balance} Euro");
             Console.WriteLine($"Accountnumber = {myBA.AccountNumber} and Balance = {myBA.Balance}");
             Console.WriteLine($"Withdrawcost is {BankAccount.WithdrawCost}");
+            var tranactions = myBA.Transactions;
+            foreach (var items in myBA.Transactions)
+                Console.WriteLine($"{items.Amount} -- {items.DateOfTransaction} -- {items.TransactionType}");
             Console.ReadKey();
 
         }
